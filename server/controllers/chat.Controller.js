@@ -1,41 +1,47 @@
 import axios from "axios";
 import  Chat  from "../models/Chat.js";
 import dotenv from "dotenv";
+import { response } from "express";
 dotenv.config();
 
 
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
-export const AIResponse=async(message)=>{
+
+ const AIResponse = async (message) => {
     try {
-        
-        const response=await axios.post(process.env.AIResponse_URL,{
-            model:process.env.MODEL,
-            messages:[
-                {role:"system",content:"You are a helpful assistant."},
-                {role:"user",content:message}
-            ],
-        },
-        {
-            headers:{
-                "Content-Type":"application/json",
-                Authorization:`Bearer ${OPENROUTER_API_KEY}`
+        const response = await axios.post(
+            process.env.AIResponse_URL,
+            {
+                model: process.env.MODEL,
+                messages: [
+                    { role: "system", content: "You are a helpful assistant." },
+                    { role: "user", content: message }
+                ],
+            },
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`
+                }
             }
-        }
-    );
-    return response.data?.choices?.[0]?.message?.content ||  "NO response";
+        );
+        console.log("Model:", process.env.MODEL);
+        console.log("API Key:", process.env.OPENROUTER_API_KEY ? " Loaded" : " Missing");
+
+
+        return response.data?.choices?.[0]?.message?.content || "NO response";
     } catch (error) {
-        console.error("Error fetching AI response:", error);
-        return res.status(500).json({ error: "Failed to fetch AI response" });
+        console.error("Error fetching AI response:", error.response?.data || error.message);
+        throw new Error("Failed to fetch AI response");
     }
-}
+};
 
 
 
 
 
 
-///all chats of loggedIn user
 export const getUserAllChat=async(req,res)=>{
     try {
         const chat=await Chat.find({user:req.user._id}).sort({updatedAt:-1});

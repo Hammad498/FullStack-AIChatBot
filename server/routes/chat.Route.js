@@ -4,13 +4,13 @@
 
 import Router from 'express';
 import authMiddleware from '../middleware/authMiddleware.js';
-import {AIResponse, getUserAllChat, createChat, deleteChat, getUserChat} from '../controllers/chat.Controller.js';
+import { getUserAllChat, createChat, deleteChat, getUserChat} from '../controllers/chat.Controller.js';
 
 
 const router=Router();
 
 
-router.get("/getAIResponse",authMiddleware,AIResponse);
+
 
 router.get("/getUserAllChats",authMiddleware,getUserAllChat);
 
