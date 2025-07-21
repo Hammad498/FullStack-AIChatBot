@@ -1,44 +1,9 @@
-import axios from "axios";
+
 import  Chat  from "../models/Chat.js";
 import dotenv from "dotenv";
-import { response } from "express";
+import {handleChatCreation} from "../services/chat.Services.js";
+
 dotenv.config();
-
-
-const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
-
-
- const AIResponse = async (message) => {
-    try {
-        const response = await axios.post(
-            process.env.AIResponse_URL,
-            {
-                model: process.env.MODEL,
-                messages: [
-                    { role: "system", content: "You are a helpful assistant." },
-                    { role: "user", content: message }
-                ],
-            },
-            {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`
-                }
-            }
-        );
-        console.log("Model:", process.env.MODEL);
-        console.log("API Key:", process.env.OPENROUTER_API_KEY ? " Loaded" : " Missing");
-
-
-        return response.data?.choices?.[0]?.message?.content || "NO response";
-    } catch (error) {
-        console.error("Error fetching AI response:", error.response?.data || error.message);
-        throw new Error("Failed to fetch AI response");
-    }
-};
-
-
-
 
 
 
@@ -53,49 +18,38 @@ export const getUserAllChat=async(req,res)=>{
 }
 
 
+///////////////////////////////////////////////
 
 
 
+export const createChat = async (req, res) => {
+    const { chatId, message } = req.body;
 
-export const createChat=async(req,res)=>{
-    const {chatId,message}=req.body;
-    if(!message || typeof message !== 'string'){
-        return res.status(400).json({error:"Message is required and must be valid."});
+    if (!message || typeof message !== 'string') {
+        return res.status(400).json({ error: "Message is required and must be valid." });
     }
 
     try {
-        const aiResponse=await AIResponse(message);
+        const result = await handleChatCreation({
+            chatId,
+            message,
+            userId: req.user._id
+        });
 
-        if(chatId){
-            const chat=await Chat.findOne({_id:chatId,user:req.user._id});
-            if(!chat) return res.status(404).json({error:"Chat not found."});
-
-            chat.message.push({role:"user",content:message});
-            chat.message.push({role:"assistant",content:aiResponse});
-            await chat.save();
-            return res.status(200).json({reply:aiResponse,chatId});
-        }else{
-             const cleanedTitle = message.replace(/[^a-zA-Z0-9 ]/g, "").slice(0, 30);
-
-             const newChat=await Chat.create({
-                title: cleanedTitle || "Untitled Chat",
-                message:[
-                    {role:"user",content:message},
-                    {role:"assistant",content:aiResponse}
-                ],
-                user:req.user._id
-             });
-             await newChat.save();
-        return res.status(201).json({ chat: newChat, reply: aiResponse });
-               
-        };
+        if (result.chat) {
+            return res.status(201).json(result);
+        } else {
+            return res.status(200).json(result);
+        }
     } catch (error) {
         console.error("Error creating chat:", error);
-        return res.status(500).json({ error: "Failed to create chat" });
+        const status = error.status || 500;
+        const message = error.message || "Failed to create chat";
+        return res.status(status).json({ error: message });
     }
-}
+};
 
-
+///////////////////////////////////////////
 
 
 export const deleteChat=async(req,res)=>{
