@@ -29,64 +29,74 @@ export const generateToken=(userId)=>{
 
 
 
-export const register=async(req,res)=>{
-    try{
-        const {username, email, password} = req.body;
+export const register = async (req, res) => {
+    try {
+        const { username, email, password } = req.body;
+
         if (!username || !email || !password) {
-            return res.status(400).json({ message: "All fields are required" });
+            return { error: "All fields are required" };
         }
+
         const existingUser = await User.findOne({
             $or: [{ username }, { email }]
         });
+
         if (existingUser) {
-            return res.status(400).json({ message: "User already exists" });
+            return { error: "User already exists" };
         }
+
         const hashedPassword = await hashPassword(password);
+
         const newUser = new User({
             username,
             email,
             password: hashedPassword
         });
+
         const savedUser = await newUser.save();
         const token = generateToken(savedUser._id);
-    }catch (error) {
+
+        return { token, savedUser };
+
+    } catch (error) {
         console.error("Registration error:", error);
-        res.status(500).json({ message: "Internal server error" });
+        return { error: "Internal server error" };
     }
-}
+};
 
 ////////////////////////////
 
 
 
 
-export const login =async(req,res)=>{
+
+export const login = async (req, res) => {
     try {
         const { email, password } = req.body;
         if (!email || !password) {
-            return res.status(400).json({ message: "Email and password are required" });
+            return { error: "Email and password are required" };
         }
+
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(404).json({ message: "User not found" });
+            return { error: "User not found" };
         }
+        
+
         const isMatch = await comparePassword(password, user.password);
         if (!isMatch) {
-            
-            return res.status(401).json({ message: "Invalid credentials" });
-        };
+            return { error: "Invalid credentials" };
+        }
+
         const token = generateToken(user._id);
-        res.status(200).json({
-            user: {
-                id: user._id,
-                username: user.username,
-                email: user.email
-            },
-            token
-        });
+
+        return {
+            token,
+            user
+        };
+
     } catch (error) {
         console.error("Login error:", error);
-        res.status(500).json({ message: "Internal server error" });
-        
+        return { error: "Internal server error" };
     }
-}
+};

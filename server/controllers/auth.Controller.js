@@ -1,13 +1,14 @@
 
 import {register,login } from "../services/auth.Services.js";
 
-export const loginUser=async(req,res)=>{
+export const loginUser = async (req, res) => {
     try {
-        const user=await login(req,res);
-        const { token, user: loggedInUser } = user;
-        if (!loggedInUser || !token) {
-            return res.status(400).json({ message: "Login failed & token generation failed" });
+        const { token, user: loggedInUser, error } = await login(req, res);
+
+        if (error) {
+            return res.status(400).json({ message: error });
         }
+
         res.status(200).json({
             user: {
                 id: loggedInUser._id,
@@ -16,12 +17,12 @@ export const loginUser=async(req,res)=>{
             },
             token
         });
+
     } catch (error) {
-        console.error("Login error:", error);
+        console.error("Login controller error:", error);
         res.status(500).json({ message: "Internal server error" });
-        
     }
-}
+};
 
 
 
@@ -31,12 +32,12 @@ export const loginUser=async(req,res)=>{
 
 
 
-export const registerUser=async(req,res)=>{
+export const registerUser = async (req, res) => {
     try {
-        const user=await register(req,res);
-        const { token, savedUser } = user;
-        if (!savedUser  || !token) {
-            return res.status(400).json({ message: "User registration failed & token generation failed" });
+        const { token, savedUser, error } = await register(req, res);
+
+        if (error) {
+            return res.status(400).json({ message: error });
         }
 
         res.status(201).json({
@@ -48,8 +49,22 @@ export const registerUser=async(req,res)=>{
             token
         });
     } catch (error) {
-        console.error("Registration error:", error);
+        console.error("Controller registration error:", error);
         res.status(500).json({ message: "Internal server error" });
-        
+    }
+};
+
+
+
+
+
+
+export const logOutUser=(req,res)=>{
+    try {
+        res.clearCookie("token");
+        res.status(200).json({ message: "Logged out successfully" });
+    } catch (error) {
+        console.error("Logout error:", error);
+        res.status(500).json({ message: "Internal server error" });
     }
 }

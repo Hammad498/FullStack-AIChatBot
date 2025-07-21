@@ -1,4 +1,4 @@
-import {jwt} from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import {comparePassword, generateToken, hashPassword} from '../services/auth.Services.js';
 import User from '../models/User.js';
 

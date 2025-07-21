@@ -1,12 +1,16 @@
 import { Router } from "express";
-import { loginUser, registerUser } from "../controllers/auth.Controller.js";
-import authMiddleware from "../middleware/authMiddleware.js";
+import { loginUser, registerUser,logOutUser } from "../controllers/auth.Controller.js";
+import { validateEmailMiddleware } from "../validation/userValidation.js";
 
 const router=Router();
 
 
-router.post("/login",loginUser);
-router.post("/register",registerUser);
+router.post("/login",validateEmailMiddleware,loginUser);
+router.post("/register",validateEmailMiddleware ,registerUser);
+
+
+//logout
+router.post('/logout',logOutUser);
 
 
 
