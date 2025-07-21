@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
+import redisClient from "./config/redisClient.js";
 import authRoutes from "./routes/auth.Route.js";
 import aiRoutes from "./routes/chat.Route.js";
 
@@ -8,6 +9,7 @@ import aiRoutes from "./routes/chat.Route.js";
 dotenv.config();
 
 connectDB();
+ 
 
 
 
