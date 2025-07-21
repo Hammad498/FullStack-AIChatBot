@@ -2,6 +2,8 @@ import express from "express";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/auth.Route.js";
+import aiRoutes from "./routes/chat.Route.js";
+
 
 dotenv.config();
 
@@ -14,6 +16,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use("/api/auth", authRoutes);
+app.use("/api/ai", aiRoutes);
 
 
 
