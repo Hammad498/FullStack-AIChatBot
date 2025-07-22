@@ -27,22 +27,33 @@ export const validateWordCount = (maxWords = 50) => {
 
 export const validateImageUpload = (maxFiles = 3) => {
   return async (req, res, next) => {
-    if (!req.files || req.files.length === 0) {
-      return res.status(400).json({ error: "At least one image must be uploaded." });
+    const chatId = req.body.chatId;
+    const isNewChat = !chatId;
+
+    // If it's a new chat, image is required
+    if (isNewChat && (!req.files || req.files.length === 0)) {
+      return res.status(400).json({ error: "At least one image must be uploaded for new chats." });
     }
 
-    if (req.files.length > maxFiles) {
-      return res.status(400).json({ error: `Only up to ${maxFiles} images can be uploaded.` });
-    }
+    // If images are provided, validate them
+    if (req.files && req.files.length > 0) {
+      if (req.files.length > maxFiles) {
+        return res.status(400).json({ error: `Only up to ${maxFiles} images can be uploaded.` });
+      }
 
-    const invalid = req.files.find(file => !file.mimetype.startsWith("image/"));
-    if (invalid) {
-      return res.status(400).json({ error: "Only image files are allowed." });
+      const invalid = req.files.find(file => !file.mimetype.startsWith("image/"));
+      if (invalid) {
+        return res.status(400).json({ error: "Only image files are allowed." });
+      }
     }
 
     next();
   };
 };
+/////////////////////////////
+
+
+
 
 export const enforceDailyUploadLimit = async (req, res, next) => {
   try {
@@ -51,18 +62,23 @@ export const enforceDailyUploadLimit = async (req, res, next) => {
       return res.status(401).json({ error: "Unauthorized user." });
     }
 
-    const limitKey = `upload_count:${userId}`;
-    const currentCount = parseInt(await redisClient.get(limitKey)) || 0;
+    const isNewChat = !req.body.chatId;
+    const isUploadingImage = req.files && req.files.length > 0;
 
-    if (currentCount >= 3) {
-      return res.status(429).json({ error: "Daily image upload limit reached (3 per day)." });
+   
+    if (isNewChat && isUploadingImage) {
+      const limitKey = `upload_count:${userId}`;
+      const currentCount = parseInt(await redisClient.get(limitKey)) || 0;
+
+      if (currentCount >= 6) {
+        return res.status(429).json({ error: "Daily image upload limit reached (6 per day)." });
+      }
+
+      await redisClient.multi()
+        .incr(limitKey)
+        .expire(limitKey, 24 * 60 * 60) // 24 hours
+        .exec();
     }
-
-    
-    await redisClient.multi()
-      .incr(limitKey)
-      .expire(limitKey, 24 * 60 * 60) // 24 hours
-      .exec();
 
     next();
   } catch (err) {
@@ -70,4 +86,5 @@ export const enforceDailyUploadLimit = async (req, res, next) => {
     res.status(500).json({ error: "Internal server error." });
   }
 };
+
 

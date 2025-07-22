@@ -43,10 +43,10 @@ export const handleChatCreation = async ({ chatId, message, userId }) => {
 ///////////////////////////////////
 
 
-export const handleImageChatCreation = async ({ message, files, userId }) => {
+export const handleImageChatCreation = async ({ chatId, message, files, userId }) => {
 
 
-    
+
   const imagesBase64 = await Promise.all(
     files.map(async (file) => {
       const buffer = await fs.readFile(file.path);
@@ -54,17 +54,34 @@ export const handleImageChatCreation = async ({ message, files, userId }) => {
     })
   );
 
-  
+  // Get AI response
   const aiReply = await AIResponseImage(message, imagesBase64);
 
-  const chat = await Chat.create({
-    title: message?.slice(0, 30) || "Image Analysis",
-    message: [
-      { role: "user", content: message || "Uploaded image(s)" },
-      { role: "assistant", content: aiReply }
-    ],
-    user: userId
-  });
+  if (chatId) {
+    // Update existing chat
+    const existingChat = await Chat.findOne({ _id: chatId, user: userId });
+   
 
-  return { aiReply, chat };
+    existingChat.message.push({ role: "user", content: message || "Uploaded image(s)" });
+    existingChat.message.push({ role: "assistant", content: aiReply });
+
+    await existingChat.save();
+
+    return { reply: aiReply, chatId , chat: existingChat };
+
+
+  } else {
+    // Create new chat
+    const title = message?.slice(0, 30) || "Image Analysis";
+    const newChat = await Chat.create({
+      title,
+      message: [
+        { role: "user", content: message || "Uploaded image(s)" },
+        { role: "assistant", content: aiReply }
+      ],
+      user: userId
+    });
+
+    return { aiReply, chat: newChat };
+  }
 };

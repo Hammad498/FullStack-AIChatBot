@@ -94,13 +94,13 @@ export const getUserChat=async(req,res)=>{
 
 export const createImageChat = async (req, res) => {
   try {
-    const { message } = req.body;
+   const { message, chatId } = req.body;
     const userId = req.user._id;
     const files = req.files;
 
-    const { aiReply, chat } = await handleImageChatCreation({ message, files, userId });
+    const { aiReply, chat } = await handleImageChatCreation({ chatId, message, files, userId });
 
-    return res.status(201).json({ reply: aiReply, chat });
+    return res.status(201).json({ reply: aiReply, chat, chatId: chat?._id || chatId });
 
   } catch (error) {
     console.error("createImageChat error:", error.message);
