@@ -5,18 +5,29 @@ import redisClient from "./config/redisClient.js";
 import authRoutes from "./routes/auth.Route.js";
 import aiRoutes from "./routes/chat.Route.js";
 
+import path from "path";
+import { fileURLToPath } from 'url';
+
 
 dotenv.config();
 
 connectDB();
- 
-
 
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+
+
 app.use("/api/auth", authRoutes);
 app.use("/api/ai", aiRoutes);
 
