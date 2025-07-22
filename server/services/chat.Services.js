@@ -54,7 +54,7 @@ export const handleImageChatCreation = async ({ chatId, message, files, userId }
     })
   );
 
-  // Get AI response
+  //// Get AI response
   const aiReply = await AIResponseImage(message, imagesBase64);
 
   if (chatId) {
