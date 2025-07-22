@@ -2,6 +2,7 @@
 import  Chat  from "../models/Chat.js";
 import dotenv from "dotenv";
 import {handleChatCreation,handleImageChatCreation} from "../services/chat.Services.js";
+import {retrieveContext} from '../services/ragChat.Services.js'
 
 
 dotenv.config();
@@ -107,3 +108,30 @@ export const createImageChat = async (req, res) => {
     res.status(500).json({ error: "Something went wrong." });
   }
 };
+
+
+
+//////////////////////
+
+
+export const createChatRag=async(req,res)=>{
+    try {
+        const {messages}=req.body;
+        const latestMessage=messages[messages.length-1]?.content;
+
+        const contextChunks=await retrieveContext(latestMessage);
+        const context=contextChunks.join("\n");
+
+       
+
+        const responseMsg={
+            role:"assistant",
+            content:`Based on retrieve context ${context}, reply to the latest message ${latestMessage}`
+        };
+
+        res.json({messages:[...messages,responseMsg]});
+    } catch (error) {
+        console.error("Error creating chat RAG:", error);
+        res.status(500).json({ error: "Failed to create chat RAG" });
+    }
+}
