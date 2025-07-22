@@ -4,7 +4,8 @@ import redisClient from "../config/redisClient.js";
 
 export const validateWordCount = (maxWords = 50) => {
   return (req, res, next) => {
-    const { message } = req.body;
+    
+    const {message}=req.body;
     if (!message) {
       return res.status(400).json({ error: "Message is required." });
     }
@@ -52,6 +53,6 @@ export const enforceDailyUploadLimit = async (req, res, next) => {
     return res.status(429).json({ error: "You can only upload once every 24 hours." });
   }
 
-  await redisClient.setEx(limitKey, 24 * 60 * 60, "locked");
+  await redisClient.setEx(limitKey, 5, "locked");
   next();
 };
