@@ -1,7 +1,8 @@
 
 import  Chat  from "../models/Chat.js";
 import dotenv from "dotenv";
-import {handleChatCreation} from "../services/chat.Services.js";
+import {handleChatCreation,handleImageChatCreation} from "../services/chat.Services.js";
+
 
 dotenv.config();
 
@@ -82,3 +83,27 @@ export const getUserChat=async(req,res)=>{
         return res.status(500).json({ error: "Failed to fetch user chat" });
     }
 }
+
+
+
+
+/////////////////////////
+
+
+
+
+export const createImageChat = async (req, res) => {
+  try {
+    const { message } = req.body;
+    const userId = req.user._id;
+    const files = req.files;
+
+    const { aiReply, chat } = await handleImageChatCreation({ message, files, userId });
+
+    return res.status(201).json({ reply: aiReply, chat });
+
+  } catch (error) {
+    console.error("createImageChat error:", error.message);
+    res.status(500).json({ error: "Something went wrong." });
+  }
+};
