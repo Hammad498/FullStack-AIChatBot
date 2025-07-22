@@ -45,14 +45,29 @@ export const validateImageUpload = (maxFiles = 3) => {
 };
 
 export const enforceDailyUploadLimit = async (req, res, next) => {
-  const ip = req.ip;
-  const limitKey = `upload_limit:${ip}`;
-  const alreadyUploaded = await redisClient.get(limitKey);
+  try {
+    const userId = req.user?._id;
+    if (!userId) {
+      return res.status(401).json({ error: "Unauthorized user." });
+    }
 
-  if (alreadyUploaded) {
-    return res.status(429).json({ error: "You can only upload once every 24 hours." });
+    const limitKey = `upload_count:${userId}`;
+    const currentCount = parseInt(await redisClient.get(limitKey)) || 0;
+
+    if (currentCount >= 3) {
+      return res.status(429).json({ error: "Daily image upload limit reached (3 per day)." });
+    }
+
+    
+    await redisClient.multi()
+      .incr(limitKey)
+      .expire(limitKey, 24 * 60 * 60) // 24 hours
+      .exec();
+
+    next();
+  } catch (err) {
+    console.error("Upload limit middleware error:", err.message);
+    res.status(500).json({ error: "Internal server error." });
   }
-
-  await redisClient.setEx(limitKey, 5, "locked");
-  next();
 };
+

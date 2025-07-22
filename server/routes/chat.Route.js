@@ -27,10 +27,10 @@ router.post("/createMsg",authMiddleware,createChat);
 router.post(
   "/uploadImageChat",
   authMiddleware,
-  upload.array("images"),
-//   validateImageUpload(10),
+  upload.array("images", 3),
+  validateImageUpload(3),
   validateWordCount(50),
-//   enforceDailyUploadLimit,
+  enforceDailyUploadLimit,
   createImageChat
 );
 
