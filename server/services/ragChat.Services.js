@@ -11,7 +11,6 @@ export const retrieveContext=async(querry)=>{
         limit:10
     });
 
-
     const docs=await cursor.toArray();
     return docs.map((doc)=>doc.text);
 }

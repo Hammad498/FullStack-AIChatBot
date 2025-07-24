@@ -122,8 +122,6 @@ export const createChatRag=async(req,res)=>{
         const contextChunks=await retrieveContext(latestMessage);
         const context=contextChunks.join("\n");
 
-       
-
         const responseMsg={
             role:"assistant",
             content:`Based on retrieve context ${context}, reply to the latest message ${latestMessage}`

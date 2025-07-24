@@ -1,27 +1,23 @@
 import {DataAPIClient} from '@datastax/astra-db-ts';
 import { PuppeteerWebBaseLoader } from "@langchain/community/document_loaders/web/puppeteer";
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
+import puppeteer from 'puppeteer';
 import { embeddingModel } from '../utils/embedUtils.js';
 import db from '../config/astraClient.js';
 import dotenv from "dotenv";
+import os from 'os';
 dotenv.config();
 
 
+const {ASTRA_DB_COLLECTION,} = process.env;
 
 
-const {
-  ASTRA_DB_COLLECTION,
-  ASTRA_DB_ENDPOINT,
-  ASTRA_DB_APPLICATION_TOKEN,
-  HF_API_KEY 
-} = process.env;
-
-
-const f1data = [
-  'https://en.wikipedia.org/wiki/Formula_One',
-  'https://www.skysports.com/f1',
-  'https://www.forbes.com/sites/brettknight/2024/12/10/formula-1s-highest-paid-drivers-2024/',
-  'https://www.formula1.com/en/latest/article.2024-f1-calendar-confirmed-with-23-races-including-saudi-arabia-and-qatar.6Zz86Zz8'
+const jobData = [
+  'https://remoteok.com/remote-dev-jobs',
+  // 'https://en.wikipedia.org/wiki/Formula_One',
+  // 'https://www.skysports.com/f1',
+  // 'https://www.forbes.com/sites/brettknight/2024/12/10/formula-1s-highest-paid-drivers-2024/',
+  // 'https://www.formula1.com/en/latest/article.2024-f1-calendar-confirmed-with-23-races-including-saudi-arabia-and-qatar.6Zz86Zz8'
 ];
 
 const splitter = new RecursiveCharacterTextSplitter({
@@ -34,7 +30,7 @@ const createCollection=async(similarityMetric='cosine')=>{
         const collection=await db.listCollections();
         if(!collection.some((c)=>c.name===ASTRA_DB_COLLECTION)){
             await db.createCollection(ASTRA_DB_COLLECTION,{
-                vector:{dimension:1024,metric:similarityMetric}
+                vector:{dimension:1536,metric:similarityMetric}
             });
             console.log("Collection created");
         }else{
@@ -49,16 +45,17 @@ const createCollection=async(similarityMetric='cosine')=>{
 
 
 const scrapePage = async (url) => {
-  console.log(`🌍 Scraping ${url}...`);
+  console.log(`---> Scraping ${url}...`);
   
   const loader = new PuppeteerWebBaseLoader(url, {
+    puppeteer,
     launchOptions: { 
       headless: "new", 
       args: [
         '--no-sandbox',
         '--disable-setuid-sandbox',
         '--disable-gpu',
-        `--user-data-dir=${require('os').tmpdir()}/puppeteer_profile`
+        `--user-data-dir=${os.tmpdir()}/puppeteer_profile`
       ],
       timeout: 120000, 
     },
@@ -82,7 +79,7 @@ const scrapePage = async (url) => {
 const loadSampleData = async () => {
   const collection = await db.collection(ASTRA_DB_COLLECTION);
   
-  for (const url of f1data) {
+  for (const url of jobData ) {
     console.log(` Processing ${url}...`);
     
     try {
@@ -96,7 +93,7 @@ const loadSampleData = async () => {
 
       for (const chunk of chunks) {
         try {
-          const embedding = await embeddingsModel.embedQuery(chunk);
+          const embedding = await embeddingModel.embedQuery(chunk);
           await collection.insertOne({
             vector: embedding, 
             text: chunk,
@@ -117,7 +114,7 @@ const main = async () => {
   try {
     await createCollection();
     await loadSampleData();
-    console.log("🎯 Process completed successfully!");
+    console.log(" Process completed successfully!");
   } catch (error) {
     console.error(" Error in main process:", error);
   }
