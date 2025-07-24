@@ -10,7 +10,6 @@ import {
     deleteChat, 
     getUserChat,
     createImageChat,
-    createChatRag
 } from '../controllers/chat.Controller.js';
 
 
@@ -40,7 +39,7 @@ router.delete("/deleteChat/:id",authMiddleware,deleteChat);
 
 router.get("/getUserChat/:id",authMiddleware,getUserChat);
 
-router.post("/createChat",authMiddleware,validateWordCount(50),createChatRag);
+// router.post("/createChat",authMiddleware,validateWordCount(50),createChatRag);
 
 
 export default router;

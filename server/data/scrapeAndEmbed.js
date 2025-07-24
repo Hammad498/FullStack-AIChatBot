@@ -14,10 +14,6 @@ const {ASTRA_DB_COLLECTION,} = process.env;
 
 const jobData = [
   'https://remoteok.com/remote-dev-jobs',
-  // 'https://en.wikipedia.org/wiki/Formula_One',
-  // 'https://www.skysports.com/f1',
-  // 'https://www.forbes.com/sites/brettknight/2024/12/10/formula-1s-highest-paid-drivers-2024/',
-  // 'https://www.formula1.com/en/latest/article.2024-f1-calendar-confirmed-with-23-races-including-saudi-arabia-and-qatar.6Zz86Zz8'
 ];
 
 const splitter = new RecursiveCharacterTextSplitter({
@@ -30,7 +26,7 @@ const createCollection=async(similarityMetric='cosine')=>{
         const collection=await db.listCollections();
         if(!collection.some((c)=>c.name===ASTRA_DB_COLLECTION)){
             await db.createCollection(ASTRA_DB_COLLECTION,{
-                vector:{dimension:1536,metric:similarityMetric}
+                vector:{dimension:768,metric:similarityMetric}
             });
             console.log("Collection created");
         }else{

@@ -4,6 +4,7 @@ import connectDB from "./config/db.js";
 import redisClient from "./config/redisClient.js";
 import authRoutes from "./routes/auth.Route.js";
 import aiRoutes from "./routes/chat.Route.js";
+import ragRoutes from "./routes/ragChat.Route.js";
 
 import path from "path";
 import { fileURLToPath } from 'url';
@@ -29,7 +30,9 @@ app.use(express.json());
 
 
 app.use("/api/auth", authRoutes);
+app.use("/api/rag",ragRoutes);
 app.use("/api/ai", aiRoutes);
+
 
 
 
