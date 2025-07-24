@@ -2,9 +2,15 @@ import express from "express";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import redisClient from "./config/redisClient.js";
+import passport from 'passport';
+import './config/passport.js';
+import session from "express-session";
+
+
 import authRoutes from "./routes/auth.Route.js";
 import aiRoutes from "./routes/chat.Route.js";
 import ragRoutes from "./routes/ragChat.Route.js";
+import googleAuthRoutes from './routes/googleAuth.Route.js'
 
 import path from "path";
 import { fileURLToPath } from 'url';
@@ -22,10 +28,20 @@ const PORT = process.env.PORT || 3000;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+app.use(session({
+    secret: "secret-key",
+    resave: false,
+    saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use('/auth',googleAuthRoutes);
 
 
 

@@ -23,7 +23,7 @@ export const createChatRag = async (req, res) => {
 
     res.json({ messages: [...messages, responseMsg] });
   } catch (error) {
-    console.error("❌ Error creating chat RAG:", error);
+    console.error(" Error creating chat RAG:", error);
     res.status(500).json({ error: "Failed to create chat RAG" });
   }
 };

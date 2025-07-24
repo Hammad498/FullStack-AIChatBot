@@ -1,5 +1,6 @@
 
 import {register,login } from "../services/auth.Services.js";
+import User from "../models/User.js";
 
 export const loginUser = async (req, res) => {
     try {
@@ -66,5 +67,17 @@ export const logOutUser=(req,res)=>{
     } catch (error) {
         console.error("Logout error:", error);
         res.status(500).json({ message: "Internal server error" });
+    }
+}
+
+
+
+export const getAllLogedInUsers=async(req,res)=>{
+    try {
+        const users = await User.find({}, "-password -googleId").sort({ createdAt: -1 });
+        res.status(200).json(users);
+    } catch (error) {
+        console.log("Error fetching users:", error);
+        res.status(500).json({ error: "Failed to fetch users" });
     }
 }
