@@ -62,6 +62,11 @@ export const login = async (req, res) => {
             return { error: "User not found" };
         }
 
+        if (!user.password) {
+           return { error: "This account uses GitHub login. Please login with GitHub." };
+      }
+
+
 
         const isMatch = await comparePassword(password, user.password);
         if (!isMatch) {

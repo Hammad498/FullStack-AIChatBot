@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import redisClient from "./config/redisClient.js";
+import cors from "cors";
 
 
 import passport from 'passport';
@@ -32,12 +33,18 @@ dotenv.config();
 connectDB();
 
 
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+app.use(cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+}));
 
 app.use(session({
     secret: "secret-key",
