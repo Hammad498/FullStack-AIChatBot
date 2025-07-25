@@ -26,7 +26,7 @@ function ChatPage() {
 
     const fetchChats = async () => {
       try {
-        const res = await fetch(`${API_BASE}/chat`, {
+        const res = await fetch(`${API_BASE}/getUserAllChats`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -53,23 +53,43 @@ function ChatPage() {
     fetchChats();
   }, [token, navigate]);
 
-  const handleSend = async (message) => {
-    if (!message.trim()) return;
+  const handleSend = async (message, imageFiles = []) => {
+    if (!message.trim() && imageFiles.length === 0) return;
 
-    const updatedMessages = [...messages, { role: "user", content: message }];
+    const updatedMessages = [...messages];
+    if (message) updatedMessages.push({ role: "user", content: message });
+    if (imageFiles.length > 0) updatedMessages.push({ role: "user", content: "[📷 Image Uploaded]" });
+
     setMessages([...updatedMessages, { role: "bot", content: "<typing>" }]);
 
     try {
-      const res = await fetch(`${API_BASE}/chat`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ message, chatId: currentChatId }),
-      });
+      let res, data;
 
-      const data = await res.json();
+      if (imageFiles.length > 0) {
+        const formData = new FormData();
+        imageFiles.forEach((file) => formData.append("images", file));
+        if (message) formData.append("text", message);
+        if (currentChatId) formData.append("chatId", currentChatId);
+
+        res = await fetch(`${API_BASE}/uploadImageChat`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        });
+      } else {
+        res = await fetch(`${API_BASE}/createMsg`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ message, chatId: currentChatId }),
+        });
+      }
+
+      data = await res.json();
 
       if (res.ok) {
         const botReply = { role: "bot", content: data.reply };
@@ -126,7 +146,7 @@ function ChatPage() {
     setCurrentChatId(null);
 
     try {
-      await fetch(`${API_BASE}/chat/${currentChatId}`, {
+      await fetch(`${API_BASE}/deleteChat/${currentChatId}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,

@@ -64,10 +64,7 @@ function Sidebar({ onNewChat, onSelectChat, chatSessions, isOpen, onClose }) {
           </div>
         </div>
 
-        {/* Footer message */}
-        <div className="text-center text-gray-500 text-xs p-3 border-t border-gray-700">
-          Developed by <span className="text-white font-semibold">RAHUL DRAVID</span>
-        </div>
+        
       </div>
     </>
   );

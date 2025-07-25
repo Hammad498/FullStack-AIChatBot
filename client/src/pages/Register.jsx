@@ -25,6 +25,7 @@ function Register() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
+        credentials: "include",
       });
 
       const data = await res.json();
@@ -42,7 +43,10 @@ function Register() {
 
   const handleOAuthRegister = (provider) => {
     window.location.href = `http://localhost:3000/auth/${provider}`;
+    createOAuthSession(provider);
   };
+
+  
 
   return (
     <div className="h-screen flex items-center justify-center bg-[#343541] text-white">

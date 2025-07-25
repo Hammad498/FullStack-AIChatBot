@@ -11,12 +11,11 @@ router.get("/github", passport.authenticate("github", { scope: [ "user:email" ] 
 const url="http://localhost:3000/auth/github/callback";
 
 
-//Callback from GitHub
+
 router.get("/github/callback",
   passport.authenticate("github", {
-    // successRedirect: "/success",
-    failureRedirect: "/login",
-    session: false,
+    failureRedirect: "http://localhost:5173/login",
+    session: true,
   }),
   githubCallbackController
 );

@@ -18,6 +18,7 @@ function Login() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
+        credentials: "include",
       });
 
       const data = await res.json();
@@ -34,6 +35,9 @@ function Login() {
   const handleOAuthLogin = (provider) => {
     // Redirect to backend OAuth route
     window.location.href = `http://localhost:3000/auth/${provider}`;
+
+    // Create OAuth session
+    createOAuthSession(provider);
   };
 
   return (
