@@ -12,6 +12,10 @@ import aiRoutes from "./routes/chat.Route.js";
 import ragRoutes from "./routes/ragChat.Route.js";
 import googleAuthRoutes from './routes/googleAuth.Route.js'
 
+
+
+
+
 import path from "path";
 import { fileURLToPath } from 'url';
 
@@ -48,6 +52,9 @@ app.use('/auth',googleAuthRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/rag",ragRoutes);
 app.use("/api/ai", aiRoutes);
+
+
+
 
 
 

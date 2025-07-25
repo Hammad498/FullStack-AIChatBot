@@ -105,8 +105,7 @@ export const AIResponseImage = async (message, base64Images) => {
 
 
 
-//npm install puppeteer
-//npm install @langchain/community --legacy-peer-deps
+
 
 
 
