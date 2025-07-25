@@ -26,4 +26,3 @@ function OAuthCallback() {
 }
 
 export default OAuthCallback;
-import Chat from "../models/Chat.js";

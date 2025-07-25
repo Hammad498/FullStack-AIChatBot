@@ -20,7 +20,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         
-        {/* 🔐 OAuth callback route */}
+        {/*  OAuth callback route */}
         <Route path="/oauth/callback" element={<OAuthCallback />} />
       </Routes>
     </Router>
