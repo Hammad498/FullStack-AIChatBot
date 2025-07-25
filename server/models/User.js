@@ -14,7 +14,7 @@ const userSchema=new mongoose.Schema({
     password:{
         type:String,
         required: function () {
-      return !this.googleId; 
+      return !this.googleId && !this.githubId; 
     },
     },
      googleId: {
@@ -22,6 +22,8 @@ const userSchema=new mongoose.Schema({
     unique: true,
     sparse: true,
   },
+  githubId: { type: String },
+
 }, { timestamps: true });
 
 export default mongoose.model("User",userSchema);

@@ -2,15 +2,22 @@ import express from "express";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import redisClient from "./config/redisClient.js";
+
+
 import passport from 'passport';
-import './config/passport.js';
+import './config/authPassport/googlePassport.js';
+import './config/authPassport/githubPassport.js';
+
 import session from "express-session";
 
 
 import authRoutes from "./routes/auth.Route.js";
 import aiRoutes from "./routes/chat.Route.js";
 import ragRoutes from "./routes/ragChat.Route.js";
-import googleAuthRoutes from './routes/googleAuth.Route.js'
+
+
+import googleAuthRoutes from './routes/3rdPartyAuth/googleAuth.Route.js';
+import githubAuthRoutes from './routes/3rdPartyAuth/githubAuth.Route.js';
 
 
 
@@ -46,6 +53,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use('/auth',googleAuthRoutes);
+app.use('/auth',githubAuthRoutes);
 
 
 

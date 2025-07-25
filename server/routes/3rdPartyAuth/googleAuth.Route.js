@@ -2,7 +2,7 @@
 import express from "express";
 import passport from "passport";
 
-import {googleCallbackController} from '../controllers/googleAuth.Controller.js'
+import {googleCallbackController} from '../../controllers/3rdPartyAuthControllers/googleAuth.Controller.js';
 
 const router = express.Router();
 

@@ -2,7 +2,7 @@
 import passport from "passport";
 import GoogleStrategy from "passport-google-oauth20";
 import dotenv from "dotenv";
-import User from "../models/User.js"; 
+import User from "../../models/User.js";
 dotenv.config();
 
 passport.use(new GoogleStrategy({
@@ -27,6 +27,10 @@ async (accessToken, refreshToken, profile, done) => {
         done(err, null);
     }
 }));
+
+
+
+
 
 passport.serializeUser((user, done) => {
     done(null, user.id);
