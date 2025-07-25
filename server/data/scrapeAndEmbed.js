@@ -56,10 +56,21 @@ const scrapePage = async (url) => {
       timeout: 120000, 
     },
     gotoOptions: { waitUntil: 'domcontentloaded', timeout: 120000 },
+    // evaluate: async (page) => {
+    //   await new Promise(resolve => setTimeout(resolve, 5000));
+    //   return await page.evaluate(() => document.body.innerText);
+    // },
+
+
     evaluate: async (page) => {
-      await new Promise(resolve => setTimeout(resolve, 5000));
-      return await page.evaluate(() => document.body.innerText);
-    },
+  await new Promise(resolve => setTimeout(resolve, 5000));
+
+  return await page.evaluate(() => {
+    const jobSection = document.querySelector("table#jobsboard"); // or any job-content selector
+    return jobSection ? jobSection.innerText : document.body.innerText;
+  });
+}
+
   });
 
   try {

@@ -97,10 +97,11 @@ export const AIResponseImage = async (message, base64Images) => {
 
     return response.data?.choices?.[0]?.message?.content || "NO response";
   } catch (error) {
-    console.error("Error fetching AI response:", error.response?.data || error.message);
+    console.error("Error fetching AI response:", error.response?.data);
     throw new Error("Failed to fetch AI response");
   }
 };
+
 
 
 

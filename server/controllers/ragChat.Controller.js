@@ -1,6 +1,7 @@
 
 
 import { retrieveContext } from "../services/ragChat.Services.js";
+import { getLLMAnswer } from "../services/llmService.js";
 
 export const createChatRag = async (req, res) => {
   try {
@@ -14,16 +15,27 @@ export const createChatRag = async (req, res) => {
     const contextChunks = await retrieveContext(latestMessage);
     const context = contextChunks.join("\n\n");
 
+    const prompt = `
+You are an AI assistant. Use the context below to answer the user's question. 
+If the answer cannot be found in the context, just say "I don't know."
+
+Context:
+${context}
+
+Question: ${latestMessage}
+`;
+
+
+    const llmAnswer = await getLLMAnswer(prompt);
+
     const responseMsg = {
       role: "assistant",
-      content: context
-        ? `${context}`
-        : `Sorry, I couldn't find relevant results for: "${latestMessage}"`
+      content: llmAnswer || `Sorry, I couldn't find relevant results for: "${latestMessage}"`,
     };
 
     res.json({ messages: [...messages, responseMsg] });
   } catch (error) {
-    console.error(" Error creating chat RAG:", error);
+    console.error("Error creating chat RAG:", error);
     res.status(500).json({ error: "Failed to create chat RAG" });
   }
 };

@@ -70,8 +70,8 @@ export const enforceDailyUploadLimit = async (req, res, next) => {
       const limitKey = `upload_count:${userId}`;
       const currentCount = parseInt(await redisClient.get(limitKey)) || 0;
 
-      if (currentCount >= 6) {
-        return res.status(429).json({ error: "Daily image upload limit reached (6 per day)." });
+      if (currentCount >= 8) {
+        return res.status(429).json({ error: "Daily image upload limit reached (8 per day)." });
       }
 
       await redisClient.multi()

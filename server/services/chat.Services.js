@@ -85,3 +85,8 @@ export const handleImageChatCreation = async ({ chatId, message, files, userId }
     return { aiReply, chat: newChat };
   }
 };
+
+
+
+
+
