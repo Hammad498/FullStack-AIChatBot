@@ -2,29 +2,43 @@
 
 
 
-
 import { useState } from "react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; 
 
 function ChatInput({ onSend }) {
   const [input, setInput] = useState("");
   const [images, setImages] = useState([]);
+  const [imagePreviews, setImagePreviews] = useState([]);
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!input.trim() && images.length === 0) return;
-    onSend(input, images);
+
+    const response = await onSend(input, images); 
+
+    if (response?.success) {
+      toast.success("✅ Uploaded successfully!");
+    } else {
+      toast.error("❌ Upload failed!");
+    }
+
     setInput("");
     setImages([]);
-    document.getElementById("image-upload").value = null; 
+    setImagePreviews([]);
+    document.getElementById("image-upload").value = null;
   };
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
     setImages(files);
+
+    const previews = files.map((file) => URL.createObjectURL(file));
+    setImagePreviews(previews);
   };
 
   return (
     <div className="p-3 rounded-md w-[50%] mx-auto">
-      <div className="max-w-2xl mx-auto flex gap-2">
+      <div className="max-w-2xl mx-auto flex gap-2 mb-2">
         <div className="flex items-center gap-2 bg-[#343541] p-2 rounded-md">
           <input
             type="file"
@@ -57,6 +71,20 @@ function ChatInput({ onSend }) {
           Send
         </button>
       </div>
+
+      {/* Image Previews */}
+      {imagePreviews.length > 0 && (
+        <div className="flex gap-2 flex-wrap mb-2">
+          {imagePreviews.map((src, idx) => (
+            <img
+              key={idx}
+              src={src}
+              alt={`preview-${idx}`}
+              className="h-24 rounded border border-gray-600"
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
