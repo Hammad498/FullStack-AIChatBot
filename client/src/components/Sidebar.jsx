@@ -24,11 +24,11 @@ function Sidebar({ onNewChat, onSelectChat, chatSessions, isOpen, onClose }) {
           fixed lg:static top-0 left-0 h-full w-64 bg-[#202123] text-[#E5E7EB]
           transform ${isOpen ? "translate-x-0" : "-translate-x-full"} 
           lg:translate-x-0 transition-transform duration-300 ease-in-out
-          z-40 flex flex-col justify-between
+          z-40 flex flex-col justify-between shahadow-lg shadow-gray-900 shadow-2xl
         `}
       >
         <div>
-          <div className="p-4 border-b border-gray-700 flex justify-between items-center">
+          <div className="p-3 border-b border-gray-700 flex justify-between items-center">
             <button
               onClick={onNewChat}
               className="w-full bg-[#40414F] hover:bg-[#4b4c5a] p-2 rounded text-left"

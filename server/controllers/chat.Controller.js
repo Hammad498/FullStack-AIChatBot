@@ -20,10 +20,6 @@ export const getUserAllChat=async(req,res)=>{
 }
 
 
-///////////////////////////////////////////////
-
-
-
 export const createChat = async (req, res) => {
     const { chatId, message } = req.body;
 

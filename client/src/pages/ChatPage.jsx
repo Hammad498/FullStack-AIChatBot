@@ -37,7 +37,7 @@ function ChatPage() {
         if (res.ok) {
           setChatSessions(data);
           if (data.length > 0) {
-            setMessages(data[0].messages);
+            setMessages(data[0].message);
             setCurrentChatId(data[0]._id);
           }
         } else {
@@ -58,7 +58,7 @@ function ChatPage() {
 
     const updatedMessages = [...messages];
     if (message) updatedMessages.push({ role: "user", content: message });
-    if (imageFiles.length > 0) updatedMessages.push({ role: "user", content: "[ Image Uploaded]" });
+    if (imageFiles.length > 0) updatedMessages.push({ role: "user", content: `The image is ${imageFiles.map(file => file.name).join(", ")}` });
 
     setMessages([...updatedMessages, { role: "bot", content: "<typing>" }]);
 
@@ -68,7 +68,8 @@ function ChatPage() {
       if (imageFiles.length > 0) {
         const formData = new FormData();
         imageFiles.forEach((file) => formData.append("images", file));
-        if (message) formData.append("text", message);
+        if (message) formData.append("message", message); 
+;
         if (currentChatId) formData.append("chatId", currentChatId);
 
         res = await fetch(`${API_BASE}/uploadImageChat`, {
@@ -131,11 +132,12 @@ function ChatPage() {
   const handleSelectChat = (id) => {
     const session = chatSessions.find((c) => c._id === id);
     if (session) {
-      setMessages(session.messages);
+      setMessages(session.message);
       setCurrentChatId(id);
     }
     setSidebarOpen(false);
   };
+
 
   const handleDeleteChat = async () => {
     if (!currentChatId) return;
