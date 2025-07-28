@@ -16,7 +16,7 @@ function ChatWindow({ messages }) {
       {isEmpty ? (
         <div className="flex-1 flex items-center justify-center">
           <div className="text-gray-400 text-xl text-center">
-            Hello, how can I help you buddy...?
+            Hello!
           </div>
         </div>
       ) : (
