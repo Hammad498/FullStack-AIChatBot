@@ -53,6 +53,10 @@ function ChatPage() {
     fetchChats();
   }, [token, navigate]);
 
+
+
+  ///////////handle send on two condition 1.image+text-->text    2.only text-->text
+
   const handleSend = async (message, imageFiles = []) => {
     if (!message.trim() && imageFiles.length === 0) return;
 
