@@ -41,10 +41,10 @@ function Register() {
     }
   };
 
-  const handleOAuthRegister = (provider) => {
-    window.location.href = `http://localhost:3000/auth/${provider}`;
-    createOAuthSession(provider);
-  };
+  // const handleOAuthRegister = (provider) => {
+  //   window.location.href = `http://localhost:3000/auth/${provider}`;
+  //   createOAuthSession(provider);
+  // };
 
   
 
@@ -95,22 +95,22 @@ function Register() {
         <div className="text-center text-gray-400 text-sm py-2">or</div>
 
         {/* Google Register */}
-        <button
+        {/* <button
           type="button"
           onClick={() => handleOAuthRegister("google")}
           className="w-full bg-red-600 py-2 rounded hover:opacity-90"
         >
           Continue with Google
-        </button>
+        </button> */}
 
         {/* GitHub Register */}
-        <button
+        {/* <button
           type="button"
           onClick={() => handleOAuthRegister("github")}
           className="w-full bg-gray-700 py-2 rounded hover:opacity-90"
         >
           Continue with GitHub
-        </button>
+        </button> */}
 
         <p className="text-center text-sm">
           Already have an account?{" "}

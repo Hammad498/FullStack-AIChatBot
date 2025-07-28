@@ -58,7 +58,7 @@ function ChatPage() {
 
     const updatedMessages = [...messages];
     if (message) updatedMessages.push({ role: "user", content: message });
-    if (imageFiles.length > 0) updatedMessages.push({ role: "user", content: "[📷 Image Uploaded]" });
+    if (imageFiles.length > 0) updatedMessages.push({ role: "user", content: "[ Image Uploaded]" });
 
     setMessages([...updatedMessages, { role: "bot", content: "<typing>" }]);
 

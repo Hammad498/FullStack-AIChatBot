@@ -12,6 +12,16 @@ function ChatInput({ onSend }) {
   return (
     <div className="bg-[#40414F] p-4">
       <div className="max-w-2xl mx-auto flex gap-2">
+
+        
+        <div className="flex items-center gap-2 bg-[#343541] p-2 rounded-md">
+          <input type="file" accept="image/*" multiple className="hidden" id="image-upload" />
+          <label htmlFor="image-upload" className="cursor-pointer">
+            <span className="material-icons  px-2 items-center"> ➕ </span>
+          </label>
+        </div>
+
+
         <input
           type="text"
           value={input}
