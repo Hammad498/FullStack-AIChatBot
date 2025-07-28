@@ -19,7 +19,7 @@ function ChatWindow({ messages }) {
   const isEmpty = !Array.isArray(messages) || messages.length === 0;
 
   return (
-    <div className="flex-1 overflow-y-auto flex flex-col px-4 py-4 sm:px-6 sm:py-6">
+    <div className="flex-1 overflow-y-auto  flex flex-col px-4 py-4 sm:px-6 sm:py-6">
       {isEmpty ? (
         <div className="flex-1 flex items-center justify-center">
           <div className="text-gray-400 text-xl text-center">
@@ -31,7 +31,7 @@ function ChatWindow({ messages }) {
           <div className="space-y-4">
             {messages.map((msg, index) => {
               if (!msg || typeof msg !== "object" || !msg.content || !msg.role) {
-                console.warn("⚠️ Invalid message object at index", index, msg);
+                console.warn(" Invalid message object at index", index, msg);
                 return null;
               }
 

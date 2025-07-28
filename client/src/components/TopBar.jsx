@@ -69,7 +69,7 @@ function TopBar({ onToggleSidebar, onDeleteChat, messages = [] }) {
   }, []);
 
   return (
-    <div className="bg-[#343541] rounded-2 border-b border-gray-800 sticky top-0 px-6 py-5 flex justify-between items-center relative">
+    <div className="bg-[#343541] rounded  border-b border-gray-800 sticky top-0 px-6 py-5 flex justify-between items-center relative">
       <div className="flex items-center gap-3">
         <FaBars
           className="text-white text-xl cursor-pointer lg:hidden"

@@ -37,7 +37,7 @@ function ChatInput({ onSend }) {
   };
 
   return (
-    <div className="p-3 rounded-md w-[50%] mx-auto">
+    <div className="p-1 rounded-md w-[50%] mx-auto">
       <div className="max-w-2xl mx-auto flex gap-2 mb-2">
         <div className="flex items-center gap-2 bg-[#343541] p-2 rounded-md">
           <input

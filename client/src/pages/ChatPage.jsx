@@ -58,76 +58,6 @@ function ChatPage() {
 
   ///////////handle send on two condition 1.image+text-->text    2.only text-->text
 
-//   const handleSend = async (message, imageFiles = []) => {
-//     if (!message.trim() && imageFiles.length === 0) return;
-
-//     const updatedMessages = [...messages];
-//     if (message) updatedMessages.push({ role: "user", content: message });
-//     if (imageFiles.length > 0) updatedMessages.push({ role: "user", content: `The image is ${imageFiles.map(file => file.name).join(", ")}` });
-
-//     setMessages([...updatedMessages, { role: "bot", content: "<typing>" }]);
-
-//     try {
-//       let res, data;
-
-//       if (imageFiles.length > 0) {
-//         const formData = new FormData();
-//         imageFiles.forEach((file) => formData.append("images", file));
-//         if (message) formData.append("message", message); 
-// ;
-//         if (currentChatId) formData.append("chatId", currentChatId);
-
-//         res = await fetch(`${API_BASE}/uploadImageChat`, {
-//           method: "POST",
-//           headers: {
-//             Authorization: `Bearer ${token}`,
-//           },
-//           body: formData,
-//         });
-//       } else {
-//         res = await fetch(`${API_BASE}/createMsg`, {
-//           method: "POST",
-//           headers: {
-//             "Content-Type": "application/json",
-//             Authorization: `Bearer ${token}`,
-//           },
-//           body: JSON.stringify({ message, chatId: currentChatId }),
-//         });
-//       }
-
-//       data = await res.json();
-
-//       if (res.ok ) {
-//         const botReply = { role: "bot", content: data.reply };
-//         const finalMessages = [...updatedMessages, botReply];
-//         setMessages(finalMessages);
-
-//         if (currentChatId) {
-//           const updatedSessions = chatSessions.map((session) =>
-//             session._id === currentChatId
-//               ? { ...session, messages: finalMessages }
-//               : session
-//           );
-//           setChatSessions(updatedSessions);
-//         } else if (data.chat && data.chat._id) {
-//           setChatSessions((prev) => [...prev, data.chat]);
-//           setCurrentChatId(data.chat._id);
-//         }
-//       } else {
-//         setMessages([
-//           ...updatedMessages,
-//           { role: "bot", content: "⚠️ Failed to fetch response." },
-//         ]);
-//       }
-//     } catch (err) {
-//       console.error("Frontend error:", err.message);
-//       setMessages([
-//         ...updatedMessages,
-//         { role: "bot", content: "⚠️ Something went wrong!" },
-//       ]);
-//     }
-//   };
-
 
 const handleSend = async (message, imageFiles = []) => {
   if (!message.trim() && imageFiles.length === 0) return;
@@ -137,7 +67,7 @@ const handleSend = async (message, imageFiles = []) => {
   if (message) updatedMessages.push({ role: "user", content: message });
   if (imageFiles.length > 0) {
     const imageNames = imageFiles.map(file => file.name).join(", ");
-    updatedMessages.push({ role: "user", content: `The image is ${imageNames}` });
+    updatedMessages.push({ role: "user", content: `The image(s) ${imageNames} has been uploaded` });
   }
 
   // Add typing indicator
@@ -175,10 +105,10 @@ const handleSend = async (message, imageFiles = []) => {
     if (res.ok && data.chat) {
       const newMessages = data.chat.message;
 
-      // ✅ Immediately show full message list
+      //  Immediately show full message list
       setMessages(newMessages);
 
-      // ✅ Update sidebar chats
+      //  Update sidebar chats
       if (currentChatId) {
         const updatedSessions = chatSessions.map((session) =>
           session._id === currentChatId

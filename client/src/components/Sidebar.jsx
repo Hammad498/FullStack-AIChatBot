@@ -8,7 +8,7 @@ function Sidebar({ onNewChat, onSelectChat, chatSessions, isOpen, onClose }) {
       document.body.style.overflow = "auto";
     }
   }, [isOpen]);
-
+//
   return (
     <>
       {isOpen && (
