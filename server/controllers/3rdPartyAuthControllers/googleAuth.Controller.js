@@ -101,6 +101,8 @@ export const googleCallbackController = async (req, res) => {
 
 
 export const githubCallbackController = async (req, res) => {
+  console.log("🔁 Github Callback Hit");
+  console.log("👤 req.user:", req.user);
   try {
     const user = req.user;
     if (!user) {

@@ -31,7 +31,7 @@ function TopBar({ onToggleSidebar, onDeleteChat, messages = [] }) {
           text: chatText,
         });
       } catch (err) {
-        alert("❌ Sharing was cancelled or failed.");
+        alert(" Sharing was cancelled or failed.");
       }
     } else {
       try {
@@ -39,7 +39,7 @@ function TopBar({ onToggleSidebar, onDeleteChat, messages = [] }) {
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
       } catch (err) {
-        alert("❌ Failed to copy chat.");
+        alert(" Failed to copy chat.");
       }
     }
   };
@@ -102,24 +102,20 @@ function TopBar({ onToggleSidebar, onDeleteChat, messages = [] }) {
                 onClick={handleDeleteClick}
                 className="block w-full text-left px-4 py-2 hover:bg-[#2A2B32]"
               >
-                🗑️ Delete Chat
+                 Delete Chat
               </button>
               <button
                 onClick={handleLogout}
                 className="block w-full text-left px-4 py-2 hover:bg-[#2A2B32]"
               >
-                🔒 Logout
+                 Logout
               </button>
             </div>
           )}
         </div>
 
         {/* User Image */}
-        <img
-          src="https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg"
-          alt="user"
-          className="w-8 h-8 rounded-full border border-gray-500"
-        />
+       
 
         {/* Success Toasts */}
         {copied && (

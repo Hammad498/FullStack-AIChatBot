@@ -15,7 +15,7 @@ const url="http://localhost:3000/auth/github/callback";
 router.get("/github/callback",
   passport.authenticate("github", {
     failureRedirect: "http://localhost:5173/login",
-    session: true,
+    session: false,
   }),
   githubCallbackController
 );

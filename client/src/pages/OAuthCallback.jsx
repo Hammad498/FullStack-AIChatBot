@@ -12,7 +12,10 @@ function OAuthCallback() {
     if (token) {
       localStorage.setItem("token", token);
       console.log("Token saved to localStorage", token);
-      navigate("/");
+      setTimeout(() => {
+        navigate("/");
+      }, 100); // Redirect after 0.1 second
+      // navigate("/");
     } else {
       navigate("/login?error=OAuth+login+failed");
     }
