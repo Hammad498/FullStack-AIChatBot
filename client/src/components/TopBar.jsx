@@ -27,7 +27,7 @@ function TopBar({ onToggleSidebar, onDeleteChat, messages = [] }) {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: "Chat from ChatBot 🤖",
+          title: "Chat from ChatBot ",
           text: chatText,
         });
       } catch (err) {
@@ -120,7 +120,7 @@ function TopBar({ onToggleSidebar, onDeleteChat, messages = [] }) {
         {/* Success Toasts */}
         {copied && (
           <div className="absolute top-full mt-2 right-0 bg-green-600 text-white px-3 py-1 text-sm rounded shadow z-50">
-            ✅ Chat copied!
+             Chat copied!
           </div>
         )}
 

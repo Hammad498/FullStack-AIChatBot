@@ -59,6 +59,8 @@ function ChatPage() {
   ///////////handle send on two condition 1.image+text-->text    2.only text-->text
 
 
+  ///1.
+
 const handleSend = async (message, imageFiles = []) => {
   if (!message.trim() && imageFiles.length === 0) return;
 
@@ -125,7 +127,7 @@ const handleSend = async (message, imageFiles = []) => {
     } else {
       setMessages([
         ...updatedMessages,
-        { role: "bot", content: "⚠️ Failed to fetch response." },
+        { role: "bot", content: " Failed to fetch response." },
       ]);
       return { success: false };
     }
@@ -133,7 +135,7 @@ const handleSend = async (message, imageFiles = []) => {
     console.error("Frontend error:", err.message);
     setMessages([
       ...updatedMessages,
-      { role: "bot", content: "⚠️ Something went wrong!" },
+      { role: "bot", content: " Something went wrong!" },
     ]);
     return { success: false };
   }
@@ -141,12 +143,16 @@ const handleSend = async (message, imageFiles = []) => {
 
 
 
+///2.
 
   const handleNewChat = () => {
     setMessages([]);
     setCurrentChatId(null);
     setSidebarOpen(false);
   };
+
+
+  ///3.
 
   const handleSelectChat = (id) => {
     const session = chatSessions.find((c) => c._id === id);
@@ -158,6 +164,9 @@ const handleSend = async (message, imageFiles = []) => {
   };
 
 
+
+  ///4.
+  
   const handleDeleteChat = async () => {
     if (!currentChatId) return;
 

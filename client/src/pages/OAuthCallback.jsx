@@ -5,6 +5,7 @@ function OAuthCallback() {
   const navigate = useNavigate();
 
   useEffect(() => {
+
     const searchParams = new URLSearchParams(window.location.search);
     const token = searchParams.get("token");
     console.log("Extracted token:", token);
@@ -12,10 +13,12 @@ function OAuthCallback() {
     if (token) {
       localStorage.setItem("token", token);
       console.log("Token saved to localStorage", token);
+
       setTimeout(() => {
         navigate("/");
-      }, 100); // Redirect after 0.1 second
-      // navigate("/");
+      }, 100);            //  Redirect after 0.1 second
+
+      
     } else {
       navigate("/login?error=OAuth+login+failed");
     }
