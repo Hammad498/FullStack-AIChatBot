@@ -33,7 +33,7 @@ function Login() {
   };
 
   const handleOAuthLogin = (provider) => {
-    // Redirect to backend OAuth route
+    // Redirect to backend OAuth route//
     window.location.href = `http://localhost:3000/auth/${provider}`;
 
     // Create OAuth session
