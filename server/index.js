@@ -61,7 +61,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-
+////////////////////////////////////////////////////////////////////
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
