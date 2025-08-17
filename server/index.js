@@ -69,7 +69,7 @@ app.use('/auth',googleAuthRoutes);
 app.use('/auth',githubAuthRoutes);
 
 
-
+//////////////////////////////
 app.use("/api/auth", authRoutes);
 app.use("/api/rag",ragRoutes);
 app.use("/api/ai", aiRoutes);
