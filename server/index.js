@@ -13,8 +13,7 @@ import './config/authPassport/googlePassport.js';
 import './config/authPassport/githubPassport.js';
 ///////////////////////////////////////
 import session from "express-session";
-/////////////////////////////////////////
-//////////////////////////////////////////////
+
 ////////////////////////////////////////////
 import authRoutes from "./routes/auth.Route.js";
 import aiRoutes from "./routes/chat.Route.js";
