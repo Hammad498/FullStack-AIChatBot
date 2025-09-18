@@ -12,7 +12,7 @@ import passport from 'passport';
 import './config/authPassport/googlePassport.js';
 import './config/authPassport/githubPassport.js';
 ///////////////////////////////////////
-///////////////////////////////////////
+
 import session from "express-session";
 
 ////////////////////////////////////////////
